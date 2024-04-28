@@ -3,27 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Cube : MonoBehaviour {
+public class Cube : MonoBehaviour
+{
     public float moveSpeed = 20f;
     public TextMesh victoryText;
-    
+
     public float leftRight = 0;
     public float upDown = 0;
-    
-    public void moveCube(string attempt) {
 
-        switch (attempt){
-            case "left": 
+    public void moveCube(string attempt)
+    {
+
+        switch (attempt)
+        {
+            case "left":
                 upDown = 0;
                 leftRight = -1;
                 break;
 
-            case "right": 
+            case "right":
                 upDown = 0;
                 leftRight = 1;
                 break;
 
-            case "up": 
+            case "up":
                 upDown = 1;
                 leftRight = 0;
                 break;
@@ -36,7 +39,8 @@ public class Cube : MonoBehaviour {
     }
 
 
-    void Update() {
+    void Update()
+    {
         // Move cube
         Vector3 movement = new Vector3(leftRight, 0f, upDown) * moveSpeed * Time.deltaTime;
         transform.Translate(movement);
@@ -44,12 +48,16 @@ public class Cube : MonoBehaviour {
         leftRight = 0;
         upDown = 0;
     }
-    void OnTriggerEnter(Collider other) {
+    void OnTriggerEnter(Collider other)
+    {
         Debug.Log("Rigidbody entered: " + other.gameObject.name);
-        StartCoroutine(ResetSceneAfterDelay(2f));
+        Destroy(other.gameObject);
+        if (GameObject.FindGameObjectsWithTag("Coin").Length == 1)
+            StartCoroutine(ResetSceneAfterDelay(2f));
     }
 
-    IEnumerator ResetSceneAfterDelay(float delay) {
+    IEnumerator ResetSceneAfterDelay(float delay)
+    {
         victoryText.gameObject.SetActive(true);
         yield return new WaitForSeconds(delay);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
